@@ -17,6 +17,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Check labels
+        id: check_labels
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          LABELS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER | jq -r '.labels[].name')
+
+          echo "Labels: $LABELS"
+
+          update_types=()
+          if echo "$LABELS" | grep -q 'patch'; then
+            update_types+=("patch")
+          fi
+          if echo "$LABELS" | grep -q 'minor'; then
+            update_types+=("minor")
+          fi
+          if echo "$LABELS" | grep -q 'major'; then
+            update_types+=("major")
+          fi
+
+          if [ ${#update_types[@]} -eq 0 ]; then
+            echo "No relevant labels found"
+            exit 1
+          elif [ ${#update_types[@]} -gt 1 ]; then
+            echo "Multiple update labels found: ${update_types[@]}"
+            exit 1
+          else
+            echo "update_type=${update_types[0]}" >> $GITHUB_ENV
+          fi
+
       - name: Check if PR is in draft state
         id: check-draft
         run: |
