@@ -1,21 +1,87 @@
 name: Manual Approval Workflow
+run-name: Update release version to ${{ github.event.inputs.version }}
 
 on:
   workflow_dispatch: # Позволяет запускать workflow вручную через UI GitHub
+    inputs:
+      version:
+        description: 'Version to be updated in pubspec.yaml'
+        required: true
+        default: '0.0.0+1'
 
 jobs:
+  check-draft:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Print GitHub Event JSON
+        run: echo '${{ toJson(github.event) }}'
+
+      - name: Print pull request
+        run: echo '${{ github.event.pull_request }}'
+
+      - name: Print pull request draft
+        run: echo '${{ github.event.pull_request.draft }}'
+
+      - name: Check labels
+        id: check_labels
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          LABELS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER | jq -r '.labels[].name')
+
+          echo "Labels: $LABELS"
+
+          update_types=()
+          if echo "$LABELS" | grep -q 'patch'; then
+            update_types+=("patch")
+          fi
+          if echo "$LABELS" | grep -q 'minor'; then
+            update_types+=("minor")
+          fi
+          if echo "$LABELS" | grep -q 'major'; then
+            update_types+=("major")
+          fi
+
+          if [ ${#update_types[@]} -eq 0 ]; then
+            echo "No relevant labels found"
+            exit 1
+          elif [ ${#update_types[@]} -gt 1 ]; then
+            echo "Multiple update labels found: ${update_types[@]}"
+            exit 1
+          else
+            echo "update_type=${update_types[0]}" >> $GITHUB_ENV
+          fi
+
+      - name: Check if PR is in draft state
+        id: check-draft
+        run: |
+          PR_DRAFT=$(jq '.pull_request.draft' < "${GITHUB_EVENT_PATH}")
+          echo "PR draft state: $PR_DRAFT"
+          echo "::set-output name=is_draft::$PR_DRAFT"
+
+      - name: Take action based on draft state
+        run: |
+          if [[ "${{ steps.check-draft.outputs.is_draft }}" == "true" ]]; then
+            echo "Skipping further steps because this is a draft pull request."
+          else
+            echo "Proceeding with further steps."
+            # Add your other steps here
+          fi
+
+  display-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display inputs for approval
+        run: |
+          echo "Version to be updated: ${{ github.event.inputs.version }}"
+
+#  request-approval:
   request-approval:
     runs-on: ubuntu-latest
+    needs: display-inputs
     environment:
-      name: production
-      # Требует одобрения в этом environment
-    steps:
-      - name: Approval step
-        run: echo "This step requires approval"
-
-  after-approval:
-    runs-on: ubuntu-latest
-    needs: request-approval
-    steps:
-      - name: Do something after approval
-        run: echo "Approved and proceeding with the workflow"
+      name: ci cd workflow
