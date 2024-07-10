@@ -14,3 +14,4 @@ jobs:
 
       - name: Print GitHub Event JSON
         run: echo "${{ toJson(github.event) }}"
+
