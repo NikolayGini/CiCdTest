@@ -14,8 +14,7 @@ jobs:
     steps:
       - name: Display inputs for approval
         run: |
-          echo "Parameter 1: ${{ github.event.inputs.param1 }}"
-          echo "Parameter 2: ${{ github.event.inputs.param2 }}"
+          echo "Version to be updated: ${{ github.event.inputs.version }}"
 
   request-approval:
     runs-on: ubuntu-latest
