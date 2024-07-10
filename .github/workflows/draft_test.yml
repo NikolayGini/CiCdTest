@@ -19,13 +19,13 @@ jobs:
       - name: Get PR context
         id: get_context
         run: |
-          echo "${{ toJson(github.event.pull_request) }}" > pr_context.json
-          cat pr_context.json
+          echo "${{ toJson(github.event) }}" > event_context.json
+          cat event_context.json
 
       - name: Check if PR is in draft state
         id: check_draft
         run: |
-          is_draft=$(jq .draft pr_context.json)
+          is_draft=$(jq .pull_request.draft event_context.json)
           echo "Pull Request Draft State: $is_draft"
           echo "::set-output name=is_draft::$is_draft"
 
