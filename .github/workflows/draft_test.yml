@@ -9,8 +9,17 @@ on:
         default: '0.0.0+1'
 
 jobs:
+  display-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display inputs for approval
+        run: |
+          echo "Parameter 1: ${{ github.event.inputs.param1 }}"
+          echo "Parameter 2: ${{ github.event.inputs.param2 }}"
+
   request-approval:
     runs-on: ubuntu-latest
+    needs: inputs
     environment:
       name: ci cd workflow
       # Требует одобрения в этом environment
