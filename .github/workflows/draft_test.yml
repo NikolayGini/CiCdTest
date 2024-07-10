@@ -2,6 +2,11 @@ name: Manual Approval Workflow
 
 on:
   workflow_dispatch: # Позволяет запускать workflow вручную через UI GitHub
+    inputs:
+      version:
+        description: 'Version to be updated in pubspec.yaml'
+        required: true
+        default: '0.0.0+1'
 
 jobs:
   request-approval:
