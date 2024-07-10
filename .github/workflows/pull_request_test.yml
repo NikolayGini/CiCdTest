@@ -1,11 +1,11 @@
-name: Pull request test
+name: Print GitHub Event JSON on Pull Request Events
 
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
-  pull-request-work:
+  print-event-json:
     runs-on: ubuntu-latest
 
     steps:
