@@ -10,6 +10,22 @@ on:
         default: '0.0.0+1'
 
 jobs:
+  check-draft:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if PR is a draft
+        id: check_draft
+        run: |
+          echo "PR is draft: ${{ github.event.pull_request.draft }}"
+
+      - name: Conditional step based on draft status
+        if: ${{ github.event.pull_request.draft == true }}
+        run: echo "This pull request is a draft."
+
+      - name: Another conditional step based on draft status
+        if: ${{ github.event.pull_request.draft == false }}
+        run: echo "This pull request is not a draft."
+
   display-inputs:
     runs-on: ubuntu-latest
     steps:
