@@ -10,33 +10,27 @@ on:
         default: '0.0.0+1'
 
 jobs:
-  check_draft:
+  check-draft:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Get PR context
-        id: get_context
-        run: |
-          echo "${{ toJson(github.event) }}" > event_context.json
-          cat event_context.json
-
       - name: Check if PR is in draft state
-        id: check_draft
+        id: check-draft
         run: |
-          is_draft=$(jq .pull_request.draft event_context.json)
-          echo "Pull Request Draft State: $is_draft"
-          echo "::set-output name=is_draft::$is_draft"
+          PR_DRAFT=$(jq '.pull_request.draft' < "${GITHUB_EVENT_PATH}")
+          echo "PR draft state: $PR_DRAFT"
+          echo "::set-output name=is_draft::$PR_DRAFT"
 
       - name: Take action based on draft state
         run: |
-          if [ "${{ steps.check_draft.outputs.is_draft }}" = "true" ]; then
-            echo "Skipping certain steps because PR is a draft."
-            # Add actions you want to skip or modify if the PR is a draft
+          if [[ "${{ steps.check-draft.outputs.is_draft }}" == "true" ]]; then
+            echo "Skipping further steps because this is a draft pull request."
           else
-            echo "Proceeding with the full workflow."
-            # Add your normal actions here
+            echo "Proceeding with further steps."
+            # Add your other steps here
           fi
 
   display-inputs:
