@@ -20,6 +20,12 @@ jobs:
       - name: Print GitHub Event JSON
         run: echo '${{ toJson(github.event) }}'
 
+      - name: Print pull request
+        run: echo '${{ github.event.pull_request }}'
+
+      - name: Print pull request draft
+        run: echo '${{ github.event.pull_request.draft }}'
+
       - name: Check labels
         id: check_labels
         run: |
