@@ -10,7 +10,19 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Print GitHub Event JSON
         run: echo "${{ toJson(github.event) }}"
+
+      - name: Check if Pull Request is Draft
+        run: |
+          is_draft=${{ github.event.pull_request.draft }}
+          echo "Is draft: $is_draft"
+          echo "is_draft=$is_draft" >> $GITHUB_ENV
+
+      - name: Execute if Pull Request is Draft
+        if: env.is_draft == 'true'
+        run: |
+          echo "Pull request is a draft. Executing custom code."
+          # Добавьте ваш код здесь, который должен выполниться, если PR является черновиком.
