@@ -1,4 +1,4 @@
-name: Print GitHub Event JSON on Pull Request Events
+name: Test Pull Request events
 
 on:
   pull_request:
