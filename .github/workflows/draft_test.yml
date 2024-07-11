@@ -1,5 +1,5 @@
 name: Manual Approval Workflow
-run-name: Update release version to ${{ github.event.inputs.version }} $(grep 'extra\["library_version_name"\] = "' Imperva-Development/build_constants.gradle.kts | sed 's/.*extra\["library_version_name"\] = "\(.*\)".*/\1/')
+run-name: Update release version to ${{ github.event.inputs.version }}
 
 on:
   workflow_dispatch: # Позволяет запускать workflow вручную через UI GitHub
