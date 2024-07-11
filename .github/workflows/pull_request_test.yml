@@ -25,4 +25,10 @@ jobs:
         if: env.is_draft == 'true'
         run: |
           echo "Pull request is a draft. Executing custom code."
-          # Добавьте ваш код здесь, который должен выполниться, если PR является черновиком.
+#          Add your code
+
+      - name: Execute if Pull Request is Not Draft
+        if: env.is_draft == 'false'
+        run: |
+          echo "Pull request is not a draft. Executing custom code."
+#          Add your code
