@@ -19,6 +19,14 @@ jobs:
         run: |
           echo "Version to be updated: ${{ github.event.inputs.version }}"
 
+      - name: Extract version from build_constants.gradle.kts
+        run: |
+          EXTRACTED_VERSION=$(grep 'extra\["library_version_name"\]' Imperva-Development/build_constants.gradle.kts | sed 's/.*extra\["library_version_name"\] = "\(.*\)".*/\1/')
+          echo "last_version=$EXTRACTED_VERSION" >> $GITHUB_ENV
+
+#        - name: Display extracted version
+#          run: echo "Extracted version is ${{ env.extracted_version }}"
+
   #  request-approval:
   request-approval:
     runs-on: ubuntu-latest
