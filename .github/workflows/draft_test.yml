@@ -75,14 +75,19 @@ jobs:
 
   display-inputs:
     runs-on: ubuntu-latest
+
     steps:
       - name: Display inputs for approval
         run: |
           echo "Version to be updated: ${{ github.event.inputs.version }}"
 
-#  request-approval:
+  #  request-approval:
   request-approval:
     runs-on: ubuntu-latest
     needs: display-inputs
     environment:
       name: ci cd workflow
+    steps:
+      - name: Display inputs for approval
+        run: echo "This is request-approval job"
+
