@@ -1,4 +1,5 @@
 name: Manual Approval Workflow
+
 run-name: Update release version to ${{ github.event.inputs.version }}
 
 on:
