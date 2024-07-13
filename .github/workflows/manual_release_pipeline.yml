@@ -31,7 +31,6 @@ jobs:
 
   release-new-version:
     name: Release new version
-    needs: update-library-version
     uses: ./.github/workflow/release_pipeline.yml
 #    with:
 #      version: "1.1.1"
