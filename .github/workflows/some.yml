@@ -1,5 +1,6 @@
-# .github/workflows/release.yml
 name: Test workflow
+
+run-name: Update release version to ${{ github.event.inputs.version }}
 
 on:
   workflow_dispatch:
