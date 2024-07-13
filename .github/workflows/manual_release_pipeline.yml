@@ -1,0 +1,27 @@
+name: Test workflow
+
+run-name: Update release version to ${{ github.event.inputs.version }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New version'
+        required: true
+        default: '0.0.0+1'
+
+jobs:
+  display-inputs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Display inputs for approval
+        run: |
+          echo "Version to be updated: ${{ github.event.inputs.version }}"
+
+  release-new-version:
+    name: Release new version
+    uses: ./.github/workflows/release_pipeline.yml
+  #    with:
+  #      version: "1.1.1"
+  #      version: ${{ github.event.inputs.version }}

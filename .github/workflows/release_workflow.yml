@@ -1,0 +1,23 @@
+# .github/workflows/release.yml
+name: Release
+
+on:
+  workflow_call:
+#    inputs:
+#      version:
+#        description: 'Version number for the release'
+#        required: true
+#        type: string
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+
+      - name: Create Release
+        run: |
+          echo "Creating release for version ${{ inputs.version }}"
+          # Ваши команды для создания релиза
