@@ -2,12 +2,12 @@
 name: Test workflow
 
 on:
-  workflow_call:
-#    inputs:
-#      version:
-#        description: 'Version number for the release'
-#        required: true
-#        type: string
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New version'
+        required: true
+        default: '0.0.0+1'
 
 jobs:
   create-release:
