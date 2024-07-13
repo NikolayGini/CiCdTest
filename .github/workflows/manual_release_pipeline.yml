@@ -31,7 +31,7 @@ jobs:
 
   release-new-version:
     name: Release new version
-    uses: ./.github/workflow/release_pipeline.yml
+    uses: ./.github/workflows/release_pipeline.yml
 #    with:
 #      version: "1.1.1"
 #      version: ${{ github.event.inputs.version }}
