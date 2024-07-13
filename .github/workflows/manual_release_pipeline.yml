@@ -32,6 +32,6 @@ jobs:
   release-new-version:
     name: Release new version
     needs: update-library-version
-    uses: ./.github/workflow/release_pipeline.yml@development
+    uses: ./.github/workflow/release_pipeline.yml
     with:
       version: ${{ github.event.inputs.version }}
